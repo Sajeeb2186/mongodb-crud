@@ -1,62 +1,91 @@
 
+'use client'
 
-import React from 'react'
-import RemoveBtn from './RemoveBtn'
-import Link from 'next/link'
-import {HiPencilAlt} from 'react-icons/hi';
-
+import React, { useEffect, useState } from "react";
+import RemoveBtn from "./RemoveBtn";
+import Link from "next/link";
+import { HiPencilAlt } from "react-icons/hi";
 
 // fething data from database
 
- const getTopic=async()=>{
 
-   try {
-   const res= await fetch("http://localhost:3001/api/topics",{
-      cache:"no-store",
+
+
+const getTopic = async () => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/topics`, {
+      cache: "no-store",
     });
 
-    if(!res.ok){
+    if (!res.ok) {
       throw new Error("Failed to fetch");
-
     }
-    return res.json();
+
+    const response = await res.json();
+
     
-   } catch (error) {
-
-    console.log("error loading topics",error)
     
-   }
+   
 
- }
+    // console.log(response); 
+
+   
+
+    return response;
+  } catch (error) {
+    console.log("error loading topics", error);
+  }
+};
+
+export default  function TopicsList() {
+  
+  
+  
+ 
 
 
 
+  const [topics, setTopics] = useState();
 
-export default async function TopicsList() {
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const data = await getTopic();
+      setTopics(data);
+    };
+    fetchTopics();
+  }, []);
 
-  const topics= await getTopic();
+ 
+   //console.log(topics);
 
+    // const{top}=topics;
+
+    // console.log('this is a topic',top)
+
+  
   return (
-   <>
+    <>
 
-      {topics.map(t=>(
-
-      <div className='p-4 border border-slate-300 my-3 flex justify-between items-start'>
+      {topics?.topics?.map((t) => (
+        <div
+          key={t._id}
+          className="p-4 border border-slate-300 my-3 flex justify-between items-start"
+        >
           <div>
-            <h2 className='font-bold text-2xl'>{t.title} </h2>
-            <div>{t.description}</div>
+            <h2 className="font-bold text-2xl"> {t?.title} </h2>
+            <div>{t?.description}</div>
           </div>
-          <div className='flex  gap-2'>
-            <RemoveBtn></RemoveBtn>
-            <Link href={`/editTopic/${t._id}`}>
+          <div className="flex  gap-2">
+            <RemoveBtn id={t._id}></RemoveBtn>
 
-            <HiPencilAlt size={24}></HiPencilAlt>
-            
+            <Link href={`/editTopic/${t._id}`}>
+              <HiPencilAlt size={24}></HiPencilAlt>
             </Link>
           </div>
-      </div>
+        </div>
       ))}
-   
-   </>
-  )
+
+      <div>hello</div>
+    </>
+  );
 }
