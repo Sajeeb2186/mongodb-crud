@@ -40,10 +40,6 @@ const getTopic = async () => {
 export default  function TopicsList() {
   
   
-  
- 
-
-
 
   const [topics, setTopics] = useState();
 
@@ -56,12 +52,7 @@ export default  function TopicsList() {
   }, []);
 
  
-   //console.log(topics);
-
-    // const{top}=topics;
-
-    // console.log('this is a topic',top)
-
+   
   
   return (
     <>
@@ -85,7 +76,7 @@ export default  function TopicsList() {
         </div>
       ))}
 
-      <div>hello</div>
+      
     </>
   );
 }
